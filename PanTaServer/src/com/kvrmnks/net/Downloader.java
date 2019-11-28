@@ -26,10 +26,10 @@ public class Downloader implements Runnable {
     private int findEmptyPort() {
         for (int i = 8889; true; i++) {
             try {
-                Socket s = new Socket("localhost",i);
+                Socket s = new Socket("localhost", i);
                 s.setSoTimeout(5);
                 s.close();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 return i;
             }
         }
@@ -68,7 +68,7 @@ public class Downloader implements Runnable {
         setConnect();
         try {
             mainWork();
-          //  System.out.println("233");
+            //  System.out.println("233");
             serverSocket.close();
             realSocket.close();
             in.close();

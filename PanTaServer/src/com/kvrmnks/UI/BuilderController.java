@@ -1,6 +1,8 @@
 package com.kvrmnks.UI;
 
 import com.kvrmnks.Main;
+import com.kvrmnks.data.DataBase;
+import com.kvrmnks.data.MyDialog;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,11 +43,20 @@ public class BuilderController implements Initializable {
     public void build(ActionEvent actionEvent) {
         try {
             ServerSocket ss = new ServerSocket(Integer.parseInt(portTextField.getText()));
+            try {
+                DataBase.connect(passwordTextField.getText());
+            } catch (Exception e) {
+                MyDialog.showErrorAlert("密码错误");
+                ss.close();
+                throw e;
+            }
             application.setMainForm(ss);
         } catch (NumberFormatException e) {
-            MyAlert.showErrorAlert("端口格式有误");
+            MyDialog.showErrorAlert("端口格式有误");
         } catch (IOException e) {
-            MyAlert.showInformationAlert("无法建立服务器");
+            MyDialog.showInformationAlert("无法建立服务器");
+        } catch (Exception e) {
+            ;
         }
     }
 }

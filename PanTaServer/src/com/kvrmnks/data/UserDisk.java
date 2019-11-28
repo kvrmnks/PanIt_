@@ -5,7 +5,7 @@ public class UserDisk {
     private String diskLocation;
     private User user;
 
-    public static String getDiskLocation(String name){
+    public static String getDiskLocation(String name) {
         return LOCATION + name;
     }
 

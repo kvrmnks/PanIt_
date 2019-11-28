@@ -16,8 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.DataInputStream;
@@ -63,6 +61,8 @@ public class MainController implements Initializable {
                 row.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+                        if(((TableRow<SimpleMyFileProperty>)event.getSource()).getItem()==null)
+                            return;
                         if(event.getClickCount() == 2){
                             TableRow<SimpleMyFileProperty> r = (TableRow<SimpleMyFileProperty>)event.getSource();
                             setSimpleMyFileProperty(r.getItem());

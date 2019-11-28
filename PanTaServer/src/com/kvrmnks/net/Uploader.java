@@ -30,7 +30,7 @@ public class Uploader implements Runnable {
                 Socket s = new Socket("localhost", i);
                 s.setSoTimeout(5);
                 s.close();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 return i;
             }
         }

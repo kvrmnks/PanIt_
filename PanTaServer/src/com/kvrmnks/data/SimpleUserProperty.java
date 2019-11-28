@@ -2,11 +2,11 @@ package com.kvrmnks.data;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public final class UserProperty {
+public final class SimpleUserProperty {
     private final SimpleStringProperty name;
     private final SimpleStringProperty password;
 
-    public UserProperty(User a) {
+    public SimpleUserProperty(User a) {
         name = new SimpleStringProperty(a.getName());
         password = new SimpleStringProperty(a.getPassword());
     }

@@ -1,66 +1,90 @@
 package com.kvrmnks.data;
 
-import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 
-public class DataBase implements Serializable {
-    private final String dataLocation = "data.dat";
-    ArrayList<User> user = new ArrayList<>();
+public class DataBase {
+    private static final String DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/test_db?useUnicode=true&characterEncoding=UTF-8&userSSL=false&serverTimezone=GMT%2B8"; // 见上面的解释
+    private static final String DATABASE_USER = "root"; // 用户名
+    //private static final String DATABASE_PASSWORD = "453600@#A";
+    private static Connection connection = null;
+    private static Statement statement = null;
 
-    void readObject() {
+    static {
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(dataLocation)));
-            user = (ArrayList<User>) objectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            //e.printStackTrace();
-        }
-
-    }
-
-    void writeObject() {
-        ObjectOutputStream objectOutputStream = null;
-        try {
-            objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File(dataLocation)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            objectOutputStream.writeObject(user);
-        } catch (IOException e) {
+            Class.forName(DATABASE_DRIVER);
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    DataBase() {
-        readObject();
+    public static void connect(String password) throws Exception {
+        connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, password);
+        statement = connection.createStatement();
     }
 
-    public void save() {
-        writeObject();
+    private static boolean checkUserNameAndPassword(String name, String password) throws SQLException {
+        String sql = "SELECT userName,userPassword FROM user where";
+        sql += " userName=\"" + name + "\"";
+        sql += " AND userPassword=\"" + password + "\"";
+        ResultSet resultSet = statement.executeQuery(sql);
+        return resultSet.next();
     }
 
-    public void add(User a) {
-        user.add(a);
+    private static boolean checkUserName(String name) throws SQLException {
+        String sql = "SELECT userName,userPassword FROM user where";
+        sql += " userName=\"" + name + "\"";
+        ResultSet resultSet = statement.executeQuery(sql);
+        return resultSet.next();
     }
 
-    public boolean hasSameName(User a) {
-        for (User u : user) {
-            if (u.getName().equals(a.getName()))
-                return true;
+    public static boolean has(User user) throws SQLException {
+        return checkUserNameAndPassword(user.getName(), user.getPassword());
+    }
+
+    public static boolean hasSameName(User user) throws SQLException {
+        return checkUserName(user.getName());
+    }
+
+    public static void add(User user) throws SQLException {
+        String sql = "insert into user (userName,userPassword) values(?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, user.getName());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.execute();
+    }
+
+    public static User[] getAll() {
+        String sql = "SELECT userName,userPassword FROM user";
+        ArrayList<User> ret = new ArrayList<>();
+        try {
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                ret.add(new User(resultSet.getString("userName"), resultSet.getString("userPassword")));
+            }
+            User[] returnUser = new User[ret.size()];
+            ret.toArray(returnUser);
+            return returnUser;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
-    public boolean has(User a) {
-        for (int j = 0; j < user.size(); j++) {
-            if (a.getName().equals(user.get(j).getName()) && a.getPassword().equals(user.get(j).getPassword()))
-                return true;
-        }
-        return false;
+    public static void modifyPassword(String userName, String newPassword) throws SQLException {
+        String sql = "update user set userPassword=? where userName=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        //preparedStatement.setString(1,userName);
+        preparedStatement.setString(1, newPassword);
+        preparedStatement.setString(2, userName);
+        preparedStatement.execute();
     }
 
-    public User find(User a) {
-        return a;
+    public static void deleteUser(String name) throws SQLException {
+        String sql = "delete from user where userName = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, name);
+        preparedStatement.execute();
     }
-
 }

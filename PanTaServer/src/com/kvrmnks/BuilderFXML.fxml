@@ -32,7 +32,7 @@
         <Label alignment="CENTER" prefHeight="15.0" prefWidth="229.0" text="开放端口" GridPane.rowIndex="1"/>
         <Label alignment="CENTER" prefHeight="15.0" prefWidth="402.0" text="管理员密码" GridPane.rowIndex="2"/>
         <TextField fx:id="portTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-        <PasswordField fx:id="passwordTextFiled" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <PasswordField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
         <Button fx:id="buildButton" mnemonicParsing="false" onAction="#build" text="建立" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets left="70.0"/>

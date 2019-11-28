@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class MyFile implements Serializable {
     private String name, modifyTime;
     private Long size;
-    private int type,id,fatherId;
+    private int type, id, fatherId;
     public static final int TYPEFILE = 0;
     public static final int TYPEFILEDERECTORY = 1;
 

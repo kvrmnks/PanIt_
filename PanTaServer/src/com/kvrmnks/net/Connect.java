@@ -53,7 +53,7 @@ public class Connect implements Runnable {
 
     private void download(String file) {
         Thread t = new Thread(new Downloader(socket, socketIn, socketOut,
-                UserDisk.getDiskLocation(user.getName())+file));
+                UserDisk.getDiskLocation(user.getName()) + file));
         t.start();
     }
 
@@ -72,15 +72,15 @@ public class Connect implements Runnable {
         try {
             socketOut.writeInt(FileManager.countAllByLocation(location));
             for (File f : FileManager.getFileDirectoryByLocation(location)) {
-                    new MyFile(f.getName(), f.length(), MyFile.TYPEFILEDERECTORY
-                            , MyDate.convert("" + f.lastModified())
-                    ).writeByStream(socketOut);
+                new MyFile(f.getName(), f.length(), MyFile.TYPEFILEDERECTORY
+                        , MyDate.convert("" + f.lastModified())
+                ).writeByStream(socketOut);
             }
 
             for (File f : FileManager.getFileByLocation(location)) {
-                    new MyFile(f.getName(), f.length(), MyFile.TYPEFILE
-                            , MyDate.convert("" + f.lastModified())
-                    ).writeByStream(socketOut);
+                new MyFile(f.getName(), f.length(), MyFile.TYPEFILE
+                        , MyDate.convert("" + f.lastModified())
+                ).writeByStream(socketOut);
             }
 
         } catch (IOException e) {
@@ -90,12 +90,12 @@ public class Connect implements Runnable {
     }
 
     private void rename(String file, String newName) {
-        File f = new File(UserDisk.getDiskLocation(user.getName())+file);
-        f.renameTo(new File(UserDisk.getDiskLocation(user.getName())+newName));
+        File f = new File(UserDisk.getDiskLocation(user.getName()) + file);
+        f.renameTo(new File(UserDisk.getDiskLocation(user.getName()) + newName));
     }
 
     private void delete(String file) {
-        File f = new File(UserDisk.getDiskLocation(user.getName())+file);
+        File f = new File(UserDisk.getDiskLocation(user.getName()) + file);
         if (!f.delete()) {
             System.out.println("failed");
         }
