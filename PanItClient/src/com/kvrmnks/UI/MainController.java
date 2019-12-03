@@ -253,7 +253,7 @@ public class MainController implements Initializable {
     public void searchFile(ActionEvent actionEvent) throws IOException {
         searchResult.clear();
         MyFile[] myfile = client.searchFile(fileSearchTextField.getText());
-        for(MyFile x : myfile){
+        for (MyFile x : myfile) {
             searchResult.add(new SimpleMyFileProperty(x));
         }
     }

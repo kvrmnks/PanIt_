@@ -57,7 +57,7 @@ public class Connect implements Runnable {
 
     private void upload(String fileto, String file) {
         Thread t = new Thread(new Uploader(socket, socketIn, socketOut,
-                UserDisk.getDiskLocation(user.getName())+fileto, file));
+                UserDisk.getDiskLocation(user.getName()) + fileto, file));
         t.start();
     }
 
@@ -101,8 +101,8 @@ public class Connect implements Runnable {
     }
 
     private void createDirectory(String s, String s1) {
-        File f = new File(UserDisk.getDiskLocation(user.getName()) + s + "/"+ s1);
-        if(!f.exists()){
+        File f = new File(UserDisk.getDiskLocation(user.getName()) + s + "/" + s1);
+        if (!f.exists()) {
             f.mkdir();
         }
     }
@@ -129,7 +129,7 @@ public class Connect implements Runnable {
                 upload(command[1], command[2]);
                 break;
             case "CreateDirectory":
-                createDirectory(command[1],command[2]);
+                createDirectory(command[1], command[2]);
                 break;
             case "DownloadFile":
                 download(command[1]);
@@ -148,7 +148,6 @@ public class Connect implements Runnable {
                 break;
         }
     }
-
 
 
     @Override

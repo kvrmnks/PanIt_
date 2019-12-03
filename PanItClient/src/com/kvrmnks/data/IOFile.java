@@ -8,25 +8,41 @@ import static com.kvrmnks.data.MyFile.TYPEFILEDERECTORY;
 
 public class IOFile {
     private ArrayList<MyFile> list = new ArrayList<MyFile>();
-    private int id = 1, fatherId = 0;
+    private int id = 0;
 
+    private void analyse(File x, int id) {
+        File[] files = x.listFiles();
+        if (files == null) return;
+        for (File file : files) {
+            if (file.isDirectory()) {
+                MyFile mf = new MyFile(
+                        file.getName()
+                        , file.length()
+                        , TYPEFILEDERECTORY
+                        , MyDate.convert("" + file.lastModified())
+                );
+                mf.setFatherId(id);
+                mf.setId(++this.id);
+                analyse(file, this.id);
+                list.add(mf);
+            } else {
+                MyFile mf = new MyFile(
+                        file.getName()
+                        , file.length()
+                        , TYPEFILE
+                        , MyDate.convert("" + file.lastModified())
+                );
+                mf.setId(++this.id);
+                mf.setFatherId(id);
+                list.add(mf);
+            }
+
+        }
+    }
 
     public void input(String location) {
-        int type, ID, FATHERID;
-        File file = new File(location);
-        if (file.isDirectory())
-            type = TYPEFILEDERECTORY;
-        else type = TYPEFILE;
-        ID = id;
-        FATHERID = fatherId;
-        list.add(new MyFile(file.getName(), String.valueOf(file.lastModified()), file.length(), type, ID, FATHERID));
-        fatherId = ID;
-        File[] file1 = file.listFiles();
-        if(file1 == null)return;
-        for (File value : file1) {
-            id++;
-            input(value.getPath());
-        }
+        File rootFile = new File(location);
+        analyse(rootFile, 0);
     }
 
     public ArrayList<MyFile> getList() {

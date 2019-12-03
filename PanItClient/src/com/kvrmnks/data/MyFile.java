@@ -108,7 +108,7 @@ public class MyFile implements Serializable {
         return mf;
     }
 
-    void writeByStream(DataOutputStream out) throws IOException {
+    public void writeByStream(DataOutputStream out) throws IOException {
         out.writeUTF(name);
         out.writeLong(size);
         out.writeInt(type);
@@ -116,8 +116,8 @@ public class MyFile implements Serializable {
     }
 
     @Override
-    public String toString(){
-        return ("name:"+name+" modifyTime:"+modifyTime+" path:"+path+" size:"+size+" type:"+type
-                +" id:"+id+" fatherId:"+fatherId);
+    public String toString() {
+        return ("name:" + name + " modifyTime:" + modifyTime + " path:" + path + " size:" + size + " type:" + type
+                + " id:" + id + " fatherId:" + fatherId);
     }
 }

@@ -76,17 +76,19 @@ public class Client {
     public void createFileDirectory(String fileDirectory, String fileName) throws IOException {
         socketOut.writeUTF("CreateDirectory$" + fileDirectory + "$" + fileName);
     }
+
     /*
-    * 得到所有的文件结构
-    * */
+     * 得到所有的文件结构
+     * */
     public void getWholeStructure() throws IOException {
         socketOut.writeUTF("GetWholeStructure");
     }
+
     /*
-    * searchFile 搜索文件
-    * fileName 为要搜索的文件子串
-    * */
-    public MyFile[] searchFile(String fileName) throws IOException{
+     * searchFile 搜索文件
+     * fileName 为要搜索的文件子串
+     * */
+    public MyFile[] searchFile(String fileName) throws IOException {
         getWholeStructure();
         FileStructure fs = new FileStructure();
         fs.receive(socketIn);

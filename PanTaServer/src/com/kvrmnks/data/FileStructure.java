@@ -6,7 +6,7 @@ import java.util.*;
 public class FileStructure {
     private ArrayList<MyFile> myfile;
 
-    public FileStructure(){
+    public FileStructure() {
         myfile = new ArrayList<>();
     }
 
@@ -52,7 +52,7 @@ public class FileStructure {
             }
             StringBuilder sb = new StringBuilder();
             for (int i = arrayList.size() - 1; i >= 0; i--) {
-                sb.append("/").append(MF[arrayList.get(i)-1].name);
+                sb.append("/").append(MF[arrayList.get(i) - 1].name);
             }
             myFile.path = sb.toString();
         }

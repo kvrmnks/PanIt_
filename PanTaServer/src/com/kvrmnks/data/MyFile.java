@@ -114,4 +114,10 @@ public class MyFile implements Serializable {
         out.writeInt(type);
         out.writeUTF(modifyTime);
     }
+
+    @Override
+    public String toString() {
+        return ("name:" + name + " modifyTime:" + modifyTime + " path:" + path + " size:" + size + " type:" + type
+                + " id:" + id + " fatherId:" + fatherId);
+    }
 }
