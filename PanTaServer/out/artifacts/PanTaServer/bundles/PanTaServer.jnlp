@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="PanTaServer.jnlp">
+  <information>
+    <title>PanTaServer</title>
+    <vendor>Unknown</vendor>
+    <description>PanTaServer</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="PanTaServer.jar" size="34045" download="eager" />
+    <jar href="mysql-connector-java-8.0.16.jar" size="2293144" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="600" height="400" main-class="com.kvrmnks.Main"  name="PanTaServer" />
+  <update check="background"/>
+</jnlp>

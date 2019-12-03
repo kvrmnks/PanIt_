@@ -107,6 +107,14 @@ public class Connect implements Runnable {
         }
     }
 
+    private void getWholeStructure() throws IOException {
+        IOFile ioFile = new IOFile();
+        ioFile.input(UserDisk.getDiskLocation(user.getName()));
+        FileStructure fileStructure = new FileStructure();
+        fileStructure.setMyfile(ioFile.getList());
+        fileStructure.send(socketOut);
+    }
+
     private void doCommands() throws IOException {
         String[] command = socketIn.readUTF().split("\\$");
         switch (command[0]) {
@@ -135,9 +143,13 @@ public class Connect implements Runnable {
             case "Display":
                 getStructure();
                 break;
-
+            case "GetWholeStructure":
+                getWholeStructure();
+                break;
         }
     }
+
+
 
     @Override
     public void run() {

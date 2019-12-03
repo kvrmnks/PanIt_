@@ -6,11 +6,29 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class MyFile implements Serializable {
-    private String name, modifyTime;
-    private Long size;
-    private int type, id, fatherId;
+    protected String name, modifyTime, path;
+    protected Long size;
+    protected int type, id, fatherId;
     public static final int TYPEFILE = 0;
     public static final int TYPEFILEDERECTORY = 1;
+
+    public static String backFroward(String str) {
+        StringBuilder sb = new StringBuilder();
+        int cnt = 0;
+        for (int i = 0; i < str.length(); i++) if (str.charAt(i) == '/') cnt++;
+        if (cnt == 1)
+            return str;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '/') cnt--;
+            sb.append(str.charAt(i));
+            if (cnt == 1) break;
+
+        }
+        return sb.toString();
+    }
+
+    public MyFile() {
+    }
 
     public MyFile(String name, Long size, int type, String modifyTime) {
         this.name = name;
