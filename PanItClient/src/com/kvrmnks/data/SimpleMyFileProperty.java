@@ -8,6 +8,20 @@ public class SimpleMyFileProperty {
     private final SimpleLongProperty size;
     private final SimpleStringProperty type;
     private final SimpleStringProperty modifyTime;
+    private final SimpleStringProperty path;
+    private final SimpleStringProperty location = new SimpleStringProperty("");
+
+    public String getLocation() {
+        return location.get();
+    }
+
+    public SimpleStringProperty locationProperty() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location.set(location);
+    }
 
     public SimpleMyFileProperty(MyFile my) {
         String name = my.getName();
@@ -18,6 +32,7 @@ public class SimpleMyFileProperty {
         this.size = new SimpleLongProperty(size);
         this.type = new SimpleStringProperty(type == MyFile.TYPEFILE ? "文件" : "文件夹");
         this.modifyTime = new SimpleStringProperty(modifyTime);
+        this.path = new SimpleStringProperty(my.path);
     }
 
     public SimpleMyFileProperty(String name, long size, int type, String modifyTime) {
@@ -25,6 +40,19 @@ public class SimpleMyFileProperty {
         this.size = new SimpleLongProperty(size);
         this.type = new SimpleStringProperty(type == MyFile.TYPEFILE ? "文件" : "文件夹");
         this.modifyTime = new SimpleStringProperty(modifyTime);
+        this.path = new SimpleStringProperty();
+    }
+
+    public String getPath() {
+        return path.get();
+    }
+
+    public SimpleStringProperty pathProperty() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path.set(path);
     }
 
     public String getName() {

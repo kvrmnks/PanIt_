@@ -81,9 +81,9 @@ public class Main extends Application {
     public void setMainForm(ServerSocket ss) {
         try {
             MainController mc = (MainController) replaceSceneContentForTab("MainFXML.fxml");
-            UserManager um = new UserManager();
+            //UserManager um = new UserManager();
             mc.setApp(this);
-            Server s = new Server(ss, mc);
+            Server s = new Server(ss);
             Thread t = new Thread(s);
             t.start();
 

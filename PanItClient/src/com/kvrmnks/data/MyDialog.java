@@ -18,14 +18,14 @@ public class MyDialog {
         alert.showAndWait();
     }
 
-    public static String showTextInputDialog(String content){
+    public static String showTextInputDialog(String content) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setContentText(content);
         Optional<String> ret = dialog.showAndWait();
         return ret.get();
     }
 
-    public static boolean showCheckAlert(String content){
+    public static boolean showCheckAlert(String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText(content);
         Optional<ButtonType> ret = alert.showAndWait();

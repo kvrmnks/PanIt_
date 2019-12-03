@@ -68,7 +68,6 @@ public class Downloader implements Runnable {
         setConnect();
         try {
             mainWork();
-            //  System.out.println("233");
             serverSocket.close();
             realSocket.close();
             in.close();

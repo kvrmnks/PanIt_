@@ -14,25 +14,24 @@ import java.sql.SQLException;
 
 public class Server implements Runnable {
     private ServerSocket serverSocket;
-    private MainController mainController;
 
     private Server() {
     }
 
-    public Server(ServerSocket serverSocket, MainController mainController) {
+    public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
-        this.mainController = mainController;
+       // this.mainController = mainController;
     }
 
 
-    public MainController getMainController() {
+   /* public MainController getMainController() {
         return mainController;
     }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
-
+    */
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
@@ -53,13 +52,13 @@ public class Server implements Runnable {
                 socket = serverSocket.accept();
                 in = new DataInputStream(socket.getInputStream());
                 out = new DataOutputStream(socket.getOutputStream());
-                String[] info = UserManager.getUserNameAndPassword(in.readUTF());
+                    String[] info = UserManager.getUserNameAndPassword(in.readUTF());
                 while (info.length != 2 || !UserManager.checkUser(info[0], info[1])) {
                     out.writeBoolean(false);
                     info = UserManager.getUserNameAndPassword(in.readUTF());
                 }
                 out.writeBoolean(true);
-                Thread t = new Thread(new Connect(socket, in, out, mainController,
+                Thread t = new Thread(new Connect(socket, in, out,
                         new User(info[0], info[1])));
                 t.start();
 

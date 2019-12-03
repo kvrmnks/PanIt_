@@ -14,15 +14,13 @@ public class Connect implements Runnable {
     private Socket socket;
     private DataInputStream socketIn;
     private DataOutputStream socketOut;
-    private MainController mainController;
     private User user;
 
     public Connect(Socket socket, DataInputStream socketIn, DataOutputStream socketOut
-            , MainController mainController, User user) {
+            , User user) {
         this.socket = socket;
         this.socketIn = socketIn;
         this.socketOut = socketOut;
-        this.mainController = mainController;
         this.user = user;
     }
 
@@ -58,7 +56,8 @@ public class Connect implements Runnable {
     }
 
     private void upload(String fileto, String file) {
-        Thread t = new Thread(new Uploader(socket, socketIn, socketOut, fileto, file));
+        Thread t = new Thread(new Uploader(socket, socketIn, socketOut,
+                UserDisk.getDiskLocation(user.getName())+fileto, file));
         t.start();
     }
 
@@ -101,6 +100,13 @@ public class Connect implements Runnable {
         }
     }
 
+    private void createDirectory(String s, String s1) {
+        File f = new File(UserDisk.getDiskLocation(user.getName()) + s + "/"+ s1);
+        if(!f.exists()){
+            f.mkdir();
+        }
+    }
+
     private void doCommands() throws IOException {
         String[] command = socketIn.readUTF().split("\\$");
         switch (command[0]) {
@@ -115,6 +121,7 @@ public class Connect implements Runnable {
                 upload(command[1], command[2]);
                 break;
             case "CreateDirectory":
+                createDirectory(command[1],command[2]);
                 break;
             case "DownloadFile":
                 download(command[1]);

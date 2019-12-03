@@ -33,7 +33,7 @@ public class ConnectController implements Initializable {
             String ip = ipTextField.getText();
             int port = Integer.parseInt(portTextField.getText());
             Socket socket = new Socket(ip, port);
-            application.setLoginForm(socket,ip);
+            application.setLoginForm(socket, ip);
         } catch (NumberFormatException e) {
             MyDialog.showErrorAlert("端口格式有误");
         } catch (UnknownHostException e) {

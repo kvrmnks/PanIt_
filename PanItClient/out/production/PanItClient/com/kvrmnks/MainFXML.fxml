@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -9,14 +10,13 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kvrmnks.UI.MainController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab text="Untitled Tab 1">
+          <Tab text="主界面">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
@@ -35,6 +35,7 @@
                                           <MenuItem fx:id="renameMenuItem" mnemonicParsing="false" onAction="#reName" text="重命名" />
                                     <MenuItem fx:id="removeMenuItem" mnemonicParsing="false" onAction="#delete" text="删除" />
                                     <MenuItem fx:id="bindMenuItem" mnemonicParsing="false" onAction="#binding" text="绑定" />
+                                    <MenuItem fx:id="newFileDirectoryMenuList" mnemonicParsing="false" onAction="#newFileDirectory" text="新建文件夹" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
@@ -43,19 +44,57 @@
                      <top>
                           <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                               <items>
+                              <Button fx:id="flushButton" mnemonicParsing="false" onAction="#flush" text="刷新" />
                                   <Button fx:id="backForwardButton" mnemonicParsing="false" onAction="#backForward" text="后退" />
                                   <TextField fx:id="pathTextField" editable="false" />
+                              <Button fx:id="uploadButton" mnemonicParsing="false" onAction="#upload" text="上传" />
                               </items>
                           </ToolBar>
                      </top>
                   </BorderPane>
                </content>
           </Tab>
-          <Tab text="Untitled Tab 2">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
+          <Tab text="文件搜索">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <items>
+                              <Label text="文件名" />
+                              <TextField fx:id="fileSearchTextField" />
+                            <Button fx:id="fileSearchButton" mnemonicParsing="false" onAction="#searchFile" text="搜索" />
+                          </items>
+                        </ToolBar>
+                     </top>
+                     <center>
+                        <TableView fx:id="searchTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="searchFileLocationTableColumn" prefWidth="75.0" text="文件位置" />
+                            <TableColumn fx:id="searchFileNameTableColumn" prefWidth="75.0" text="文件名" />
+                              <TableColumn fx:id="searchFileSizeTableColumn" prefWidth="75.0" text="文件大小" />
+                              <TableColumn fx:id="searchFileModifyTimeTableColumn" prefWidth="75.0" text="修改时间" />
+                          </columns>
+                        </TableView>
+                     </center>
+                  </BorderPane>
+               </content>
           </Tab>
+            <Tab text="下载上传列表">
+                <content>
+
+                </content>
+               <content>
+                  <TableView fx:id="logTableView" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="modifyTypeTableColumn" prefWidth="75.0" text="操作类型" />
+                      <TableColumn fx:id="modifyFileNameTableColumn" prefWidth="75.0" text="文件名" />
+                        <TableColumn fx:id="modifyFileSizeTableColumn" prefWidth="75.0" text="文件大小" />
+                        <TableColumn fx:id="modifyProcessTableColumn" prefWidth="75.0" text="操作进度" />
+                        <TableColumn fx:id="modifyTimeTableColumn" prefWidth="75.0" text="操作时间" />
+                    </columns>
+                  </TableView>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>

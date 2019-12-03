@@ -88,7 +88,7 @@ public class Main extends Application {
         }
     }
 
-    public void setLoginForm(Socket s,String serverIp) {
+    public void setLoginForm(Socket s, String serverIp) {
         try {
             this.serverIp = serverIp;
             LoginController login = (LoginController) replaceSceneContent("LoginFXML.fxml");
