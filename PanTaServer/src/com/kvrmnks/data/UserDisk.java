@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class UserDisk {
-    private final static String LOCATION = "d:/";
+    private final static String LOCATION = "c:/";
     private String diskLocation;
     private User user;
 

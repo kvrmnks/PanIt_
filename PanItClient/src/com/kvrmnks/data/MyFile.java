@@ -6,11 +6,19 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class MyFile implements Serializable {
-    protected String name, modifyTime, path;
-    protected Long size;
-    protected int type, id, fatherId;
+    private String name, modifyTime, path;
+    private Long size;
+    private int type, id, fatherId;
     public static final int TYPEFILE = 0;
     public static final int TYPEFILEDERECTORY = 1;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public static String backFroward(String str) {
         StringBuilder sb = new StringBuilder();

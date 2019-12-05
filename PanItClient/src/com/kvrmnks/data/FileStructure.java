@@ -22,8 +22,30 @@ public class FileStructure {
         }
     }
 
-    public void receive(DataInputStream in) throws IOException {
+    private void buildPath() {
+        MyFile MF[] = new MyFile[myfile.size()];
+        myfile.toArray(MF);
+        Arrays.sort(MF, Comparator.comparingInt(MyFile::getId));
+        for (MyFile myFile : MF) {
+            MyFile tmpFile = myFile;
+            ArrayList<Integer> arrayList = new ArrayList<>();
+            System.out.println(myFile);
+            arrayList.add(tmpFile.getId());
+            while (tmpFile.getFatherId() != 0) {
+                tmpFile = MF[tmpFile.getFatherId() - 1];
+                arrayList.add(tmpFile.getId());
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = arrayList.size() - 1; i >= 0; i--) {
+                sb.append("/").append(MF[arrayList.get(i) - 1].getName());
+            }
+            myFile.setPath(sb.toString());
+        }
+        myfile = new ArrayList<MyFile>();
+        Collections.addAll(myfile, MF);
+    }
 
+    public void receive(DataInputStream in) throws IOException {
         int n = in.readInt();
         for (int i = 0; i < n; i++) {
             MyFile mf = new MyFile();
@@ -35,27 +57,12 @@ public class FileStructure {
             mf.setFatherId(in.readInt());
             myfile.add(mf);
         }
+        buildPath();
     }
 
     public MyFile[] search(String name) {
         MyFile MF[] = new MyFile[myfile.size()];
         myfile.toArray(MF);
-        Arrays.sort(MF, Comparator.comparingInt(a -> a.id));
-        for (MyFile myFile : MF) {
-            MyFile tmpFile = myFile;
-            ArrayList<Integer> arrayList = new ArrayList<>();
-            System.out.println(myFile);
-            arrayList.add(tmpFile.id);
-            while (tmpFile.fatherId != 0) {
-                tmpFile = MF[tmpFile.fatherId - 1];
-                arrayList.add(tmpFile.id);
-            }
-            StringBuilder sb = new StringBuilder();
-            for (int i = arrayList.size() - 1; i >= 0; i--) {
-                sb.append("/").append(MF[arrayList.get(i) - 1].name);
-            }
-            myFile.path = sb.toString();
-        }
         ArrayList<MyFile> mf = new ArrayList<>();
         for (MyFile file : MF) {
             if (file.getName().contains(name))
@@ -66,6 +73,26 @@ public class FileStructure {
         return _MF;
     }
 
+    private MyFile[] getFileByType(int type){
+        int cnt = 0;
+        for (MyFile mf : myfile)
+            if (mf.getType() == type)
+                cnt++;
+        MyFile[] myFiles = new MyFile[cnt];
+        cnt = 0;
+        for (MyFile mf : myfile)
+            if (mf.getType() == type)
+                myFiles[cnt++] = mf;
+        return myFiles;
+    }
+
+    public MyFile[] getFileDirectory() {
+        return getFileByType(MyFile.TYPEFILEDERECTORY);
+    }
+
+    public MyFile[] getFile(){
+        return getFileByType(MyFile.TYPEFILE);
+    }
     public void setMyfile(ArrayList<MyFile> list) {
         myfile = list;
     }

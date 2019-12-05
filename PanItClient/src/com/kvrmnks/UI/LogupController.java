@@ -2,6 +2,10 @@ package com.kvrmnks.UI;
 
 import com.kvrmnks.Main;
 import com.kvrmnks.data.MyDialog;
+import com.kvrmnks.data.Password;
+import com.kvrmnks.exception.PasswordException;
+import com.kvrmnks.exception.PasswordTooFewException;
+import com.kvrmnks.exception.PasswordTooWeakException;
 import com.kvrmnks.net.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -31,15 +35,62 @@ public class LogupController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) {}
 
+    public void back(ActionEvent actionEvent) {
+        application.setLoginForm();
     }
 
-    public void logup(ActionEvent actionEvent) {
-        if (!passwordTextField.getText().equals(passwordCheckTextField.getText()))
-            return;
+    private boolean isBothEmpty(){
+        return passwordTextField.getText().equals("") && passwordCheckTextField.getText().equals("");
+    }
+
+    private void setEmpty(){
+        passwordCheckLabel.setText("");
+    }
+
+    private void setRightLabel(){
+        passwordCheckLabel.setText("√");
+        passwordCheckLabel.setTextFill(Color.GREEN);
+    }
+
+    private void setWrongLabel(){
+        passwordCheckLabel.setText("×");
+        passwordCheckLabel.setTextFill(Color.RED);
+    }
+
+    private boolean checkEqual(){
+        String password = passwordTextField.getText();
+        String password2 = passwordCheckTextField.getText();
+        return password.equals(password2);
+    }
+
+    public void passwordCheck(KeyEvent keyEvent) {
+        if(isBothEmpty()){setEmpty();return;}
+        if(checkEqual())
+            setRightLabel();
+        else
+            setWrongLabel();
+    }
+
+    public boolean checkPasswordStrength(){
+        if(!isBothEmpty()){MyDialog.showErrorAlert("密码不能为空！");return false;}
+        if(!checkEqual()){MyDialog.showErrorAlert("两次输入不一致！");return false;}
         try {
-            Boolean flag = Client.logup(userNameTextField.getText(), passwordTextField.getText());
+            Password.isProper(passwordTextField.getText());
+        } catch (PasswordTooFewException e) {
+            MyDialog.showErrorAlert("密码长度至少为6！");
+            return false;
+        } catch (PasswordTooWeakException e){
+            MyDialog.showErrorAlert("密码应同时包含数字和字母！");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean logup(){
+        try {
+            boolean flag = Client.logup(userNameTextField.getText(), passwordTextField.getText());
             if (!flag) {
                 MyDialog.showErrorAlert("注册失败");
             } else {
@@ -49,32 +100,13 @@ public class LogupController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
             MyDialog.showErrorAlert("注册失败");
+            return false;
         }
-
+        return true;
     }
 
-    public void back(ActionEvent actionEvent) {
-        application.setLoginForm();
-    }
-
-
-    public void passwordCheck2(ActionEvent actionEvent) {
-
-    }
-
-    public void passwordCheck(KeyEvent keyEvent) {
-        String password = passwordTextField.getText();
-        String password2 = passwordCheckTextField.getText();
-        if (password.equals("")) {
-            passwordCheckLabel.setText("");
-        } else {
-            if (password.equals(password2)) {
-                passwordCheckLabel.setText("√");
-                passwordCheckLabel.setTextFill(Color.GREEN);
-            } else {
-                passwordCheckLabel.setText("×");
-                passwordCheckLabel.setTextFill(Color.RED);
-            }
-        }
+    public void logup(ActionEvent actionEvent) {
+        if(!checkPasswordStrength()){return;}
+        logup();
     }
 }

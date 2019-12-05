@@ -32,7 +32,6 @@ public class DownLoader implements Runnable {
     }
 
     private void setConnect() throws IOException {
-        //socket = new Socket();
         dataInputStream = new DataInputStream(socket.getInputStream());
         dataOutputStream = new DataOutputStream(socket.getOutputStream());
         fileOutputStream = new DataOutputStream(new FileOutputStream(file));
@@ -60,13 +59,11 @@ public class DownLoader implements Runnable {
         try {
             setConnect();
             downLoad();
-
             dataInputStream.close();
             dataOutputStream.close();
             fileOutputStream.close();
             socket.close();
             System.gc();
-            // System.out.println("2332");
         } catch (IOException e) {
             ExceptionSolver.solve(e);
         }
