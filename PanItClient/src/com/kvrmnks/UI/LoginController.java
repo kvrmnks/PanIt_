@@ -1,7 +1,9 @@
 package com.kvrmnks.UI;
 
 import com.kvrmnks.Main;
+import com.kvrmnks.data.MD5;
 import com.kvrmnks.data.MyDialog;
+import com.kvrmnks.net.Client;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +26,7 @@ public class LoginController implements Initializable {
     public TextField userNameTextField;
     public PasswordField passwordTextField;
     private Socket socket;
+    private String serverIp;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -38,17 +41,17 @@ public class LoginController implements Initializable {
     @FXML
     public void login(ActionEvent actionEvent) {
         try {
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = Client.getSocketIn();
+            DataOutputStream out = Client.getSocketOut();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(userNameTextField.getText());
             stringBuilder.append("$");
-            stringBuilder.append(passwordTextField.getText());
+            stringBuilder.append(MD5.getMD5(passwordTextField.getText()));
             out.writeUTF(stringBuilder.toString());
             boolean flag = false;
             flag = in.readBoolean();
             if (flag) {
-                application.setMainForm(socket, in, out);
+                application.setMainForm();
             } else {
                 MyDialog.showInformationAlert("用户名或密码错误");
             }
@@ -64,5 +67,13 @@ public class LoginController implements Initializable {
 
     public void setApp(Main app) {
         application = app;
+    }
+
+    public void logup(ActionEvent actionEvent) {
+        application.setLogupForm();
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
     }
 }

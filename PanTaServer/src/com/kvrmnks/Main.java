@@ -2,7 +2,6 @@ package com.kvrmnks;
 
 import com.kvrmnks.UI.BuilderController;
 import com.kvrmnks.UI.MainController;
-import com.kvrmnks.data.UserManager;
 import com.kvrmnks.net.Server;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -20,6 +19,7 @@ import java.net.ServerSocket;
 
 public class Main extends Application {
     private Stage stage;
+    private Scene curScene;
 
     private Initializable replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader();
@@ -32,8 +32,8 @@ public class Main extends Application {
         } finally {
             in.close();
         }
-        Scene scene = new Scene(page);
-        stage.setScene(scene);
+        curScene = new Scene(page);
+        stage.setScene(curScene);
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
@@ -49,8 +49,8 @@ public class Main extends Application {
         } finally {
             in.close();
         }
-        Scene scene = new Scene(page);
-        stage.setScene(scene);
+        curScene = new Scene(page);
+        stage.setScene(curScene);
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
@@ -81,9 +81,8 @@ public class Main extends Application {
     public void setMainForm(ServerSocket ss) {
         try {
             MainController mc = (MainController) replaceSceneContentForTab("MainFXML.fxml");
-            //UserManager um = new UserManager();
             mc.setApp(this);
-            Server s = new Server(ss);
+            Server s = new Server(ss, mc);
             Thread t = new Thread(s);
             t.start();
 

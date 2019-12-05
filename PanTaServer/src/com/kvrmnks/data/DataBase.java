@@ -47,6 +47,10 @@ public class DataBase {
         return checkUserName(user.getName());
     }
 
+    public static boolean hasSameName(String name) throws SQLException {
+        return hasSameName(new User(name, ""));
+    }
+
     public static void add(User user) throws SQLException {
         String sql = "insert into user (userName,userPassword) values(?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);

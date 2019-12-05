@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class Connect implements Runnable {
     private Socket socket;
@@ -70,17 +71,20 @@ public class Connect implements Runnable {
         location = UserDisk.getDiskLocation(user.getName()) + location;
         try {
             socketOut.writeInt(FileManager.countAllByLocation(location));
-            for (File f : FileManager.getFileDirectoryByLocation(location)) {
-                new MyFile(f.getName(), f.length(), MyFile.TYPEFILEDERECTORY
-                        , MyDate.convert("" + f.lastModified())
-                ).writeByStream(socketOut);
-            }
-
-            for (File f : FileManager.getFileByLocation(location)) {
-                new MyFile(f.getName(), f.length(), MyFile.TYPEFILE
-                        , MyDate.convert("" + f.lastModified())
-                ).writeByStream(socketOut);
-            }
+            File[] files = FileManager.getFileDirectoryByLocation(location);
+            if (files != null)
+                for (File f : files) {
+                    new MyFile(f.getName(), f.length(), MyFile.TYPEFILEDERECTORY
+                            , MyDate.convert("" + f.lastModified())
+                    ).writeByStream(socketOut);
+                }
+            files = FileManager.getFileByLocation(location);
+            if (files != null)
+                for (File f : files) {
+                    new MyFile(f.getName(), f.length(), MyFile.TYPEFILE
+                            , MyDate.convert("" + f.lastModified())
+                    ).writeByStream(socketOut);
+                }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,7 +152,6 @@ public class Connect implements Runnable {
                 break;
         }
     }
-
 
     @Override
     public void run() {

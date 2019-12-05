@@ -24,22 +24,16 @@ public class Uploader implements Runnable {
         this.fileto = fileto;
     }
 
-    private int findEmptyPort() {
-        for (int i = 8889; true; i++) {
-            try {
-                Socket s = new Socket("localhost", i);
-                s.setSoTimeout(5);
-                s.close();
-            } catch (IOException e) {
-                return i;
-            }
-        }
+    private ServerSocket findEmptyServerSocket() throws IOException {
+        ServerSocket ss = new ServerSocket(0);
+        return ss;
     }
 
     private void setConnect() {
-        port = findEmptyPort();
+        //port = findEmptyPort();
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
+            ServerSocket serverSocket = findEmptyServerSocket();
+            port = serverSocket.getLocalPort();
             out.writeInt(port);
             realSocket = serverSocket.accept();
             in = new DataInputStream(realSocket.getInputStream());

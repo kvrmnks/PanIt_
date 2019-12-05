@@ -2,12 +2,15 @@ package com.kvrmnks.UI;
 
 import com.kvrmnks.Main;
 import com.kvrmnks.data.MyDialog;
+import com.kvrmnks.net.Client;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -33,7 +36,11 @@ public class ConnectController implements Initializable {
             String ip = ipTextField.getText();
             int port = Integer.parseInt(portTextField.getText());
             Socket socket = new Socket(ip, port);
-            application.setLoginForm(socket, ip);
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            Client.setClient(in, out, socket);
+            Client.setServerIp(ip);
+            application.setLoginForm();
         } catch (NumberFormatException e) {
             MyDialog.showErrorAlert("端口格式有误");
         } catch (UnknownHostException e) {

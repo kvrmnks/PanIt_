@@ -23,23 +23,18 @@ public class Downloader implements Runnable {
         this.file = file;
     }
 
-    private int findEmptyPort() {
-        for (int i = 8889; true; i++) {
-            try {
-                Socket s = new Socket("localhost", i);
-                s.setSoTimeout(5);
-                s.close();
-            } catch (IOException e) {
-                return i;
-            }
-        }
+    private ServerSocket findEmptyServerSocket() throws IOException {
+        ServerSocket ss = null;
+        ss = new ServerSocket(0);
+        return ss;
+
     }
 
     private void setConnect() {
-        port = findEmptyPort();
         try {
-            serverSocket = new ServerSocket(port);
-            out.writeInt(port);
+            serverSocket = findEmptyServerSocket();
+            port = serverSocket.getLocalPort();
+            out.writeInt(serverSocket.getLocalPort());
             realSocket = serverSocket.accept();
             in = new DataInputStream(realSocket.getInputStream());
             out = new DataOutputStream(realSocket.getOutputStream());

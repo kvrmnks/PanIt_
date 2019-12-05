@@ -1,5 +1,8 @@
 package com.kvrmnks.data;
 
+import java.io.File;
+import java.io.IOException;
+
 public class UserDisk {
     private final static String LOCATION = "d:/";
     private String diskLocation;
@@ -7,6 +10,13 @@ public class UserDisk {
 
     public static String getDiskLocation(String name) {
         return LOCATION + name;
+    }
+
+    public static void initDisk(String name) {
+        File file = new File(LOCATION + name);
+        if (!file.exists()) {
+            file.mkdir();
+        }
     }
 
     private UserDisk() {

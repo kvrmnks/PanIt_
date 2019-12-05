@@ -61,7 +61,7 @@ public class MainController implements Initializable {
     public TableView<SimpleMyFileProperty> searchTableView;
     public TableView<SimpleLogListProperty> logTableView;
     private Main application;
-    private Client client;
+    //private Client client;
     private ObservableList<SimpleMyFileProperty> data = FXCollections.observableArrayList();
     private ObservableList<SimpleMyFileProperty> searchResult = FXCollections.observableArrayList();
     private ObservableList<SimpleLogListProperty> logdata = FXCollections.observableArrayList();
@@ -148,12 +148,13 @@ public class MainController implements Initializable {
     }
 
     public void setClient(Socket s, DataInputStream dis, DataOutputStream dos) {
-        client = new Client(dis, dos, s);
+        Client.setClient(dis, dos, s);
     }
+
 
     public void flush() throws IOException {
         data.clear();
-        MyFile[] file = client.getStructure(currentPath.getValueSafe());
+        MyFile[] file = Client.getStructure(currentPath.getValueSafe());
         for (MyFile mf : file) {
             data.add(new SimpleMyFileProperty(mf));
         }
@@ -180,11 +181,11 @@ public class MainController implements Initializable {
                 , 0
         );
         logdata.add(logListProperty);
-        client.downLoad(
+        Client.downLoad(
                 currentPath.getValueSafe() + simpleMyFileProperty.getName()
                 , simpleMyFileProperty.getName()
                 , f
-                , application.getServerIp()
+                , Client.getServerIp()
                 , logListProperty
         );
     }
@@ -193,7 +194,7 @@ public class MainController implements Initializable {
         try {
             String newName = MyDialog.showTextInputDialog("输入新的文件名");
             if (newName == null || newName.equals("")) return;
-            client.reName(currentPath.getValueSafe() + simpleMyFileProperty.getName()
+            Client.reName(currentPath.getValueSafe() + simpleMyFileProperty.getName()
                     , currentPath.getValueSafe() + newName);
             flush();
         } catch (IOException e) {
@@ -204,7 +205,7 @@ public class MainController implements Initializable {
     public void delete(ActionEvent actionEvent) {
         try {
             if (MyDialog.showCheckAlert("是否确定删除"))
-                client.delete(currentPath.getValueSafe() + simpleMyFileProperty.getName());
+                Client.delete(currentPath.getValueSafe() + simpleMyFileProperty.getName());
             flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -233,7 +234,7 @@ public class MainController implements Initializable {
                 , f.length()
                 , 0);
         logdata.add(logListProperty);
-        client.upload(currentPath.getValueSafe(), f, application.getServerIp(), logListProperty);
+        Client.upload(currentPath.getValueSafe(), f, Client.getServerIp(), logListProperty);
         flush();
     }
 
@@ -246,13 +247,13 @@ public class MainController implements Initializable {
                 return;
             }
         }
-        client.createFileDirectory(currentPath.getValueSafe(), text);
+        Client.createFileDirectory(currentPath.getValueSafe(), text);
         flush();
     }
 
     public void searchFile(ActionEvent actionEvent) throws IOException {
         searchResult.clear();
-        MyFile[] myfile = client.searchFile(fileSearchTextField.getText());
+        MyFile[] myfile = Client.searchFile(fileSearchTextField.getText());
         for (MyFile x : myfile) {
             searchResult.add(new SimpleMyFileProperty(x));
         }
