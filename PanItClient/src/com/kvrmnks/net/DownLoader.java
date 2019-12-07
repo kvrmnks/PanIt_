@@ -16,9 +16,6 @@ public class DownLoader implements Runnable {
     private DataOutputStream dataOutputStream, fileOutputStream;
     private SimpleLogListProperty logListProperty;
 
-    private DownLoader() {
-    }
-
     public DownLoader(File file, int port, String ip, SimpleLogListProperty simpleLogListProperty) throws IOException {
         if (file.exists())
             file.delete();

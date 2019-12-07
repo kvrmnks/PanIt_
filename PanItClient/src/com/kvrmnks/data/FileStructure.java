@@ -73,7 +73,7 @@ public class FileStructure {
         return _MF;
     }
 
-    private MyFile[] getFileByType(int type){
+    private MyFile[] getFileByType(int type) {
         int cnt = 0;
         for (MyFile mf : myfile)
             if (mf.getType() == type)
@@ -90,10 +90,12 @@ public class FileStructure {
         return getFileByType(MyFile.TYPEFILEDERECTORY);
     }
 
-    public MyFile[] getFile(){
+    public MyFile[] getFile() {
         return getFileByType(MyFile.TYPEFILE);
     }
+
     public void setMyfile(ArrayList<MyFile> list) {
         myfile = list;
+        buildPath();
     }
 }

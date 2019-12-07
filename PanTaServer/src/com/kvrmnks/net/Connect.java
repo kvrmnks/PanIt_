@@ -111,6 +111,20 @@ public class Connect implements Runnable {
         }
     }
 
+    private void createDirectory(String s) {
+        File f = new File(UserDisk.getDiskLocation(user.getName()) + "/" + s);
+        f.mkdirs();
+    }
+
+
+    private void getWholeStructure(String s) throws IOException {
+        IOFile ioFile = new IOFile();
+        ioFile.input(UserDisk.getDiskLocation(user.getName() + "/" + s));
+        FileStructure fileStructure = new FileStructure();
+        fileStructure.setMyfile(ioFile.getList());
+        fileStructure.send(socketOut);
+    }
+
     private void getWholeStructure() throws IOException {
         IOFile ioFile = new IOFile();
         ioFile.input(UserDisk.getDiskLocation(user.getName()));
@@ -133,7 +147,10 @@ public class Connect implements Runnable {
                 upload(command[1], command[2]);
                 break;
             case "CreateDirectory":
-                createDirectory(command[1], command[2]);
+                if (command.length > 2)
+                    createDirectory(command[1], command[2]);
+                else
+                    createDirectory(command[1]);
                 break;
             case "DownloadFile":
                 download(command[1]);
@@ -148,7 +165,10 @@ public class Connect implements Runnable {
                 getStructure();
                 break;
             case "GetWholeStructure":
-                getWholeStructure();
+                if (command.length == 1)
+                    getWholeStructure();
+                else
+                    getWholeStructure(command[1]);
                 break;
         }
     }

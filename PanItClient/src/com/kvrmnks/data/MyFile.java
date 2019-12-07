@@ -12,6 +12,21 @@ public class MyFile implements Serializable {
     public static final int TYPEFILE = 0;
     public static final int TYPEFILEDERECTORY = 1;
 
+    public String getParent() {
+        String str = path;
+        StringBuilder sb = new StringBuilder();
+        int cnt = 0;
+        for (int i = 0; i < str.length(); i++) if (str.charAt(i) == '/') cnt++;
+        if (cnt == 1)
+            return str;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '/') cnt--;
+            if (cnt == 0) break;
+            sb.append(str.charAt(i));
+        }
+        return sb.toString();
+    }
+
     public String getPath() {
         return path;
     }
@@ -30,7 +45,6 @@ public class MyFile implements Serializable {
             if (str.charAt(i) == '/') cnt--;
             sb.append(str.charAt(i));
             if (cnt == 1) break;
-
         }
         return sb.toString();
     }

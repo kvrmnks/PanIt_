@@ -42,7 +42,14 @@ public class IOFile {
 
     public void input(String location) {
         File rootFile = new File(location);
-        analyse(rootFile, 0);
+        MyFile mf = new MyFile(rootFile.getName()
+                , rootFile.length()
+                , TYPEFILEDERECTORY
+                , MyDate.convert("" + rootFile.lastModified()));
+        mf.setId(++this.id);
+        mf.setFatherId(0);
+        list.add(mf);
+        analyse(rootFile, this.id);
     }
 
     public ArrayList<MyFile> getList() {

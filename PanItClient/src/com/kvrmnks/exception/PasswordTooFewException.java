@@ -1,4 +1,4 @@
 package com.kvrmnks.exception;
 
-public class PasswordTooFewException extends PasswordException{
+public class PasswordTooFewException extends PasswordException {
 }

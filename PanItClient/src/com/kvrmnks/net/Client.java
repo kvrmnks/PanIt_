@@ -1,6 +1,7 @@
 package com.kvrmnks.net;
 
 import com.kvrmnks.data.*;
+import sun.net.www.protocol.file.FileURLConnection;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -141,5 +142,43 @@ public class Client {
         String passwordMD5 = MD5.getMD5(password);
         socketOut.writeUTF("Logup$" + name + "$" + passwordMD5);
         return socketIn.readBoolean();
+    }
+
+    /*
+     * 下载文件夹
+     * fileLocation 代表文件夹本地地址
+     * panLocation 网盘文件夹位置
+     * */
+    public static SimpleLogListProperty[] downloadFileDirectory(
+            String fileLocation
+            , String panLocation
+            , String panFileDirectoryName
+    ) throws IOException {
+        FileDirectoryDownLoader fileDirectoryDownLoader = new FileDirectoryDownLoader(
+                fileLocation
+                , panLocation
+                , panFileDirectoryName
+                , socketIn
+                , socketOut
+                , serverIp);
+        fileDirectoryDownLoader.init();
+        fileDirectoryDownLoader.download();
+        return fileDirectoryDownLoader.getProperty();
+    }
+
+    public static SimpleLogListProperty[] uploadFileDirectory(
+            String fileLocation
+            , String panLocation
+    ) throws IOException {
+        FileDirectoryUploader fileDirectoryUploader = new FileDirectoryUploader(
+                fileLocation
+                , panLocation
+                , serverIp
+                , socketIn
+                , socketOut
+        );
+        fileDirectoryUploader.init();
+        fileDirectoryUploader.upload();
+        return fileDirectoryUploader.getProperties();
     }
 }

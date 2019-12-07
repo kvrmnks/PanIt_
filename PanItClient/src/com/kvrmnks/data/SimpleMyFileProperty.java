@@ -32,7 +32,7 @@ public class SimpleMyFileProperty {
         this.size = new SimpleLongProperty(size);
         this.type = new SimpleStringProperty(type == MyFile.TYPEFILE ? "文件" : "文件夹");
         this.modifyTime = new SimpleStringProperty(modifyTime);
-        this.path = new SimpleStringProperty(my.path);
+        this.path = new SimpleStringProperty(my.getPath());
     }
 
     public SimpleMyFileProperty(String name, long size, int type, String modifyTime) {

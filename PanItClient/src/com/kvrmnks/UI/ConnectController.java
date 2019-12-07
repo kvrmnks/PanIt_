@@ -2,6 +2,7 @@ package com.kvrmnks.UI;
 
 import com.kvrmnks.Main;
 import com.kvrmnks.data.MyDialog;
+import com.kvrmnks.exception.Log;
 import com.kvrmnks.net.Client;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -40,6 +41,7 @@ public class ConnectController implements Initializable {
             DataInputStream in = new DataInputStream(socket.getInputStream());
             Client.setClient(in, out, socket);
             Client.setServerIp(ip);
+            Log.log("链接成功 ip:" + ip + " port:" + port);
             application.setLoginForm();
         } catch (NumberFormatException e) {
             MyDialog.showErrorAlert("端口格式有误");

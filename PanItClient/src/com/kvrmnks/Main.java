@@ -106,11 +106,8 @@ public class Main extends Application {
 
     public void setLoginForm() {
         try {
-            // this.serverIp = serverIp;
             LoginController login = (LoginController) replaceSceneContentForVBox("LoginFXML.fxml");
             login.setApp(this);
-            //login.setSocket(s);
-            //login.setServerIp(serverIp);
         } catch (Exception e) {
             e.printStackTrace();
         }

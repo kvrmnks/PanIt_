@@ -4,8 +4,10 @@ import com.kvrmnks.Main;
 import com.kvrmnks.data.MyDialog;
 import com.kvrmnks.data.SimpleLogListProperty;
 import com.kvrmnks.data.SimpleMyFileProperty;
+import com.kvrmnks.exception.Log;
 import com.kvrmnks.net.Client;
 import com.kvrmnks.data.MyFile;
+import com.kvrmnks.net.FileDirectoryUploader;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -28,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -60,6 +63,7 @@ public class MainController implements Initializable {
     public TableColumn<SimpleLogListProperty, String> modifyTimeTableColumn;
     public TableView<SimpleMyFileProperty> searchTableView;
     public TableView<SimpleLogListProperty> logTableView;
+    public Button uploadFileDirectoryButton;
     private Main application;
     //private Client client;
     private ObservableList<SimpleMyFileProperty> data = FXCollections.observableArrayList();
@@ -172,22 +176,29 @@ public class MainController implements Initializable {
         directoryChooser.setTitle("选择下载目录");
         File f = directoryChooser.showDialog(application.getStage());
         if (f == null) return;
-        System.out.println(simpleMyFileProperty.getSize());
-        SimpleLogListProperty logListProperty = new SimpleLogListProperty(
-                SimpleLogListProperty.TYPE_DOWNLOAD
-                , simpleMyFileProperty.getName()
-                , ""
-                , simpleMyFileProperty.getSize()
-                , 0
-        );
-        logdata.add(logListProperty);
-        Client.downLoad(
-                currentPath.getValueSafe() + simpleMyFileProperty.getName()
-                , simpleMyFileProperty.getName()
-                , f
-                , Client.getServerIp()
-                , logListProperty
-        );
+        if (simpleMyFileProperty == null) return;
+        if (simpleMyFileProperty.getType().equals("文件夹")) {
+            System.out.println("233");
+            SimpleLogListProperty[] sp = Client.downloadFileDirectory(f.getPath()
+                    , currentPath.getValueSafe(), simpleMyFileProperty.getName());
+            Collections.addAll(logdata, sp);
+        } else if (simpleMyFileProperty.getType().equals("文件")) {
+            SimpleLogListProperty logListProperty = new SimpleLogListProperty(
+                    SimpleLogListProperty.TYPE_DOWNLOAD
+                    , simpleMyFileProperty.getName()
+                    , ""
+                    , simpleMyFileProperty.getSize()
+                    , 0
+            );
+            logdata.add(logListProperty);
+            Client.downLoad(
+                    currentPath.getValueSafe() + simpleMyFileProperty.getName()
+                    , simpleMyFileProperty.getName()
+                    , f
+                    , Client.getServerIp()
+                    , logListProperty
+            );
+        }
     }
 
     public void reName(ActionEvent actionEvent) {
@@ -225,7 +236,8 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("选择要上传的文件");
         File f = fileChooser.showOpenDialog(application.getStage());
-        if (f == null) return;
+        if (f == null)
+            return;
         System.out.println(f.getName() + " " + f.length());
         SimpleLogListProperty logListProperty = new SimpleLogListProperty(
                 SimpleLogListProperty.TYPE_UPLOAD
@@ -257,5 +269,16 @@ public class MainController implements Initializable {
         for (MyFile x : myfile) {
             searchResult.add(new SimpleMyFileProperty(x));
         }
+    }
+
+    public void uploadFileDirectory(ActionEvent actionEvent) throws IOException {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("选择要上传的文件夹");
+        File file = directoryChooser.showDialog(application.getStage());
+        if (file == null)
+            return;
+        SimpleLogListProperty[] simpleLogListProperties = Client.uploadFileDirectory(file.getPath(), currentPath.getValueSafe());
+        Collections.addAll(logdata, simpleLogListProperties);
+        flush();
     }
 }
